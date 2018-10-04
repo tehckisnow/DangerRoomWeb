@@ -1,0 +1,144 @@
+<html>
+<head>
+    <title>Danger Room</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+</head>
+<body>
+    <div>
+    <h1>Welcome to the Danger Room!</h1>
+    <div>
+        <p>Time: </p>
+        minutes
+        <select id="minutes">
+            <option value=0>0</option>
+            <option value=1 selected="selected">1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+        </select>
+        <select id="seconds">
+            <option value=0>0</option>
+            <option value=30>30</option>
+        </select>
+        seconds
+        </p>
+        <p>
+        rounds:
+        <select id="rounds">
+            <option value=1>1</option>
+            <option value=2>2</option>
+            <option value=3>3</option>
+            <option value=4>4</option>
+            <option value=5>5</option>
+            <option value=6>6</option>
+        </select>
+        rest:
+        <select id="rest">
+            <option value=0>0</option>
+            <option value=10>10</option>
+            <option value=20>20</option>
+            <option value=30>30</option>
+            <option value=60>60</option>
+        </select>
+        </p>
+        <p><a href="#" onclick="toggleOptions()">more options</a></p>
+        <div id="options" hidden>These are some more options!</div>
+        <button id="go" onclick="start()">Fight!</button>
+    </div>
+    </div>
+
+
+    <script>
+        var sounds = [];
+        sounds[0] = new sound("screenshot.wav");
+        sounds[1] = new sound("startbell.wav");
+        var attacks = [];
+        attacks[0] = new sound("jab.wav");
+        attacks[1] = new sound("cross.wav");
+        attacks[2] = new sound("leadhook.wav");
+        //attacks[3] = new sound("leaduppercut.wav");
+        //attacks[4] = new sound("leadelbow.wav");
+        //attacks[5] = new sound("rearelbow.wav");
+        var time = 0;
+        var running = true;
+
+        function toggleOptions() {
+            var options = document.getElementById("options");
+            if (options.hidden){
+                options.removeAttribute("hidden");
+            }else {
+                options.setAttribute("hidden", true);
+            }
+        }
+
+        function setTimer() {
+        var minutes = document.getElementById("minutes").value;
+        var seconds = document.getElementById("seconds").value;
+        time = minutes * 60;
+        if(seconds==30) time = time + 30;
+        setTimeout(function(){ running = false; }, time * 1000);
+        }
+
+        function sound(src) {
+            this.sound = document.createElement("audio");
+            this.sound.src = src;
+            this.sound.setAttribute("preload", "auto");
+            this.sound.setAttribute("controls", "none");
+            this.sound.style.display = "none";
+            document.body.appendChild(this.sound);
+            this.play = function(){
+                this.sound.play();
+            }
+        }
+        
+        function start() {
+            if (document.getElementById("minutes").value!=0 || document.getElementById("seconds").value!=0) {
+                setTimer();
+                sounds[1].play();
+                callAttack();
+            }
+        }
+
+        function callAttack() {
+            while (running) {
+                var y = Math.floor(Math.random() * attacks.length);
+                setTimeout(function(){}, 1000);
+                attacks[y].play();
+            }
+            if (!running) {
+                sounds[1].play();
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #222222;
+            color: lightblue;
+            text-align: center;
+        }
+        h1 {
+            color: red;
+        }
+        div {
+            padding: 20px;
+            align-content: center;
+            border: 1px;
+            background-color: #111111;
+        }
+        select {
+            font-family: 'Orbitron', sans-serif;
+            color: lightblue;
+            background-color: #222222;
+            border-color: lightblue;
+        }
+        #go {
+            padding: 20px;
+            font-family: 'Orbitron', sans-serif;
+            color: lightblue;
+            background-color: #222222;
+            outline-color: lightblue;
+            border-color: lightblue;
+        }
+    </style>
+</body>
+</html>
